@@ -19,6 +19,7 @@
 ## ✨ 项目简介
 
 **AIYOU** 是一个革命性的AI驱动漫剧创作平台，让创作者能够通过简单的节点式操作，完成从创意构思到最终视频成片的全流程制作。
+<img width="2547" height="1305" alt="image" src="https://github.com/user-attachments/assets/23950855-b596-43e1-8b8a-cfd73b12d008" />
 
 先看看效果，这一段成本在2块钱不到（之前sora2稳定时候）
 <video src="https://github.com/user-attachments/assets/cdc2a60d-7c41-43c2-9fb9-fd64b7947521" width="900" controls></video>
