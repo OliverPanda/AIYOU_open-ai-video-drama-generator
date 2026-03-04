@@ -860,7 +860,7 @@ export const MediaContent: React.FC<NodeContentContext> = (ctx) => {
                                   <div key={shot.id} className="bg-black/40 border border-white/10 rounded-lg p-4">
                                       <div className="flex items-start gap-4">
                                           {/* Left: Image */}
-                                          <div className="flex-shrink-0">
+                                          <div className="flex-shrink-0 relative group/shot">
                                               <img
                                                   loading="lazy" src={shot.splitImage}
                                                   alt={`分镜 ${shot.shotNumber}`}
@@ -873,6 +873,14 @@ export const MediaContent: React.FC<NodeContentContext> = (ctx) => {
                                                       initialIndex: shot.shotNumber - 1
                                                   })}
                                               />
+                                              <a
+                                                  href={shot.splitImage}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="absolute bottom-2 right-2 px-2 py-1 bg-black/70 hover:bg-black/90 text-white text-[10px] font-bold rounded-md opacity-0 group-hover/shot:opacity-100 transition-opacity"
+                                              >
+                                                  查看
+                                              </a>
                                           </div>
 
                                           {/* Right: Info */}

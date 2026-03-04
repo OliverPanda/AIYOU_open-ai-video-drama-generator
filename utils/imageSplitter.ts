@@ -204,31 +204,29 @@ export async function exportSplitImagesAsZip(
   splitShots: SplitStoryboardShot[],
   filename: string = 'storyboard-shots.zip'
 ): Promise<void> {
-  // 动态导入 JSZip
   const JSZip = (await import('jszip')).default;
   const zip = new JSZip();
 
-  // 添加每个分镜图片到ZIP
-  splitShots.forEach((shot, index) => {
-    // Base64转换为Blob
-    const base64Data = shot.splitImage.split(',')[1];
-    const binaryData = atob(base64Data);
-    const bytes = new Uint8Array(binaryData.length);
-    for (let i = 0; i < binaryData.length; i++) {
-      bytes[i] = binaryData.charCodeAt(i);
+  // 并行下载所有图片
+  await Promise.all(splitShots.map(async (shot) => {
+    const sceneName = (shot.scene || '').substring(0, 20).replace(/[^\w\u4e00-\u9fa5]/g, '_');
+    const shotFilename = `分镜-${String(shot.shotNumber).padStart(3, '0')}${sceneName ? '-' + sceneName : ''}.png`;
+
+    if (shot.splitImage.startsWith('data:')) {
+      // base64 data URL
+      const base64Data = shot.splitImage.split(',')[1];
+      zip.file(shotFilename, base64Data, { base64: true });
+    } else {
+      // 普通 URL，fetch 获取二进制数据
+      const res = await fetch(shot.splitImage);
+      const blob = await res.blob();
+      zip.file(shotFilename, blob);
     }
-
-    // 文件名格式: 分镜-001-场景名称.png
-    const sceneName = shot.scene.substring(0, 20).replace(/[^\w\u4e00-\u9fa5]/g, '_');
-    const filename = `分镜-${String(shot.shotNumber).padStart(3, '0')}-${sceneName}.png`;
-
-    zip.file(filename, bytes);
-  });
+  }));
 
   // 生成ZIP并下载
   const blob = await zip.generateAsync({ type: 'blob' });
   const url = URL.createObjectURL(blob);
-
   const a = document.createElement('a');
   a.href = url;
   a.download = filename;

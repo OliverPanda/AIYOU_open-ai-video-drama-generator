@@ -1,6 +1,6 @@
 
 import React, { useMemo, useState, useRef } from 'react';
-import { X, User, Image as ImageIcon, AlignLeft, Shield, Heart, Zap, Target, RefreshCw, Loader2 } from 'lucide-react';
+import { X, User, Image as ImageIcon, AlignLeft, Shield, Heart, Zap, Target, RefreshCw, Loader2, Download } from 'lucide-react';
 import { CharacterProfile, AppNode } from '../types';
 
 interface CharacterDetailModalProps {
@@ -107,25 +107,38 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                                     <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-wider">
                                         <ImageIcon size={14} /> 九宫格表情 (Expression Sheet)
                                     </div>
-                                    {nodeId && onGenerateExpression && (
-                                        <button
-                                            onClick={handleGenerateExpression}
-                                            disabled={isExpressionDisabled}
-                                            className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 disabled:bg-white/5 disabled:cursor-not-allowed text-white text-[10px] font-bold rounded-lg transition-all"
-                                        >
-                                            {isExpressionDisabled ? (
-                                                <>
-                                                    <Loader2 size={12} className="animate-spin" />
-                                                    <span>生成中...</span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <RefreshCw size={12} />
-                                                    <span>{latestCharacter.expressionSheet ? '重新生成' : '生成'}</span>
-                                                </>
-                                            )}
-                                        </button>
-                                    )}
+                                    <div className="flex items-center gap-1.5">
+                                        {latestCharacter.expressionSheet && (
+                                            <a
+                                                href={latestCharacter.expressionSheet}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold rounded-lg transition-all"
+                                            >
+                                                <Download size={12} />
+                                                <span>查看</span>
+                                            </a>
+                                        )}
+                                        {nodeId && onGenerateExpression && (
+                                            <button
+                                                onClick={handleGenerateExpression}
+                                                disabled={isExpressionDisabled}
+                                                className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 disabled:bg-white/5 disabled:cursor-not-allowed text-white text-[10px] font-bold rounded-lg transition-all"
+                                            >
+                                                {isExpressionDisabled ? (
+                                                    <>
+                                                        <Loader2 size={12} className="animate-spin" />
+                                                        <span>生成中...</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <RefreshCw size={12} />
+                                                        <span>{latestCharacter.expressionSheet ? '重新生成' : '生成'}</span>
+                                                    </>
+                                                )}
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                                 <div className="aspect-square w-full bg-black rounded-xl overflow-hidden border border-white/10 shadow-lg">
                                     {latestCharacter.expressionSheet ? (
@@ -145,30 +158,43 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                                 <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-wider">
                                     <User size={14} /> 三视图 (Three-View)
                                 </div>
-                                {nodeId && onGenerateThreeView && (
-                                    <button
-                                        onClick={handleGenerateThreeView}
-                                        disabled={isThreeViewDisabled || !latestCharacter.expressionSheet}
-                                        className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 disabled:bg-white/5 disabled:cursor-not-allowed disabled:opacity-50 text-white text-[10px] font-bold rounded-lg transition-all"
-                                    >
-                                        {isThreeViewDisabled ? (
-                                            <>
-                                                <Loader2 size={12} className="animate-spin" />
-                                                <span>生成中...</span>
-                                            </>
-                                        ) : !latestCharacter.expressionSheet ? (
-                                            <>
-                                                <RefreshCw size={12} />
-                                                <span>需先生成九宫格</span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <RefreshCw size={12} />
-                                                <span>{latestCharacter.threeViewSheet ? '重新生成' : '生成'}</span>
-                                            </>
-                                        )}
-                                    </button>
-                                )}
+                                <div className="flex items-center gap-1.5">
+                                    {latestCharacter.threeViewSheet && (
+                                        <a
+                                            href={latestCharacter.threeViewSheet}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold rounded-lg transition-all"
+                                        >
+                                            <Download size={12} />
+                                            <span>查看</span>
+                                        </a>
+                                    )}
+                                    {nodeId && onGenerateThreeView && (
+                                        <button
+                                            onClick={handleGenerateThreeView}
+                                            disabled={isThreeViewDisabled || !latestCharacter.expressionSheet}
+                                            className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 disabled:bg-white/5 disabled:cursor-not-allowed disabled:opacity-50 text-white text-[10px] font-bold rounded-lg transition-all"
+                                        >
+                                            {isThreeViewDisabled ? (
+                                                <>
+                                                    <Loader2 size={12} className="animate-spin" />
+                                                    <span>生成中...</span>
+                                                </>
+                                            ) : !latestCharacter.expressionSheet ? (
+                                                <>
+                                                    <RefreshCw size={12} />
+                                                    <span>需先生成九宫格</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <RefreshCw size={12} />
+                                                    <span>{latestCharacter.threeViewSheet ? '重新生成' : '生成'}</span>
+                                                </>
+                                            )}
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                             <div className="aspect-[3/4] w-full bg-black rounded-xl overflow-hidden border border-white/10 shadow-lg">
                                 {latestCharacter.threeViewSheet ? (
