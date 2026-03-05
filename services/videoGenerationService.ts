@@ -99,7 +99,8 @@ export async function generateVideoFromStoryboard(
       }
 
       if (result.status === 'error') {
-        throw new Error(result.error || '视频生成失败');
+        const rawErr = result.error || '视频生成失败';
+        throw new Error(typeof rawErr === 'string' ? rawErr : (rawErr?.message || JSON.stringify(rawErr)));
       }
 
       // 等待5秒后重试（支持取消）
@@ -128,7 +129,13 @@ export async function generateVideoFromStoryboard(
 
   } catch (error: any) {
     console.error('[VideoGeneration] 视频生成失败:', error);
-    throw new Error(`视频生成失败: ${error.message}`);
+    // 已经是 Error 实例的直接抛出，避免重复包装
+    if (error instanceof Error) {
+      throw error;
+    }
+    // 非标准错误对象，提取可读信息
+    const msg = typeof error === 'string' ? error : JSON.stringify(error);
+    throw new Error(`视频生成失败: ${msg}`);
   }
 }
 
